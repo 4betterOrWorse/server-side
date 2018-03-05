@@ -20,4 +20,23 @@ client.on('error', err => console.error(err));
 app.use(cors());
 
 app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
+
+app.post('/api/v1/users', bodyParser, (req, res) => {
+  let{username, firstname, lastname, email, password} = req.body;
+  client.query(`INSERT INTO users(username, firstname, lastname, email, password) VALUES($1, $2, $3, $4, $5)`,
+    [username, firstname, lastname, email, password]
+  )
+    .then(() => res.sendStatus(201))
+    .cath(console.error);
+});
+
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
+
+// PORT=3000
+// CLIENT_URL=http://localhost:8080
+
+// Mac:
+// DATABASE_URL=postgres://localhost:5432/dontgo
+
+// Windows:
+// DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/dontgo
