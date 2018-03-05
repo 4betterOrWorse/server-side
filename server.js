@@ -31,3 +31,12 @@ app.post('/api/v1/users', bodyParser, (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
+
+// PORT=3000
+// CLIENT_URL=http://localhost:8080
+
+// Mac:
+// DATABASE_URL=postgres://localhost:5432/dontgo
+
+// Windows:
+// DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/dontgo
