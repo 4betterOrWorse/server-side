@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/4betterOrWorse/server-side/issues"
   },
-  "homepage": "https://github.com/4betterOrWorse/server-side#readme"
+  "homepage": "https://github.com/4betterOrWorse/server-side#readme",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "pg": "^7.4.1",
+    "superagent": "^3.8.2"
+  }
 }
