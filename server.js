@@ -23,6 +23,9 @@ app.get('/api/v1/rests', (req, res) => {
   const url = 'https://data.kingcounty.gov/resource/gkhn-e8mn.json';
 
   superagent(url)
+    .query({$where: `inspection_score > 100 and inspection_date >= '2017-01-01T00:00:00.000'`})
+    .query({inspection_closed_business: 'false'})
+    .query({$limit: '5000'})
     .query({$$app_token: `${API_KEY}`})
     .then(rests => res.send(rests.text))
     .catch(console.error);
