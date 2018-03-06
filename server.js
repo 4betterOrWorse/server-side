@@ -19,6 +19,15 @@ client.on('error', err => console.error(err));
 
 app.use(cors());
 
+app.get('/api/v1/rests', (req, res) => {
+  const url = 'https://data.kingcounty.gov/resource/gkhn-e8mn.json';
+
+  superagent(url)
+    .set(`Authorization`, `token ${API_KEY}`)
+    .then(rests => res.send(rests))
+    .catch(console.error);
+});
+
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
 app.post('/api/v1/users', bodyParser, (req, res) => {
