@@ -23,8 +23,8 @@ app.get('/api/v1/rests', (req, res) => {
   const url = 'https://data.kingcounty.gov/resource/gkhn-e8mn.json';
 
   superagent(url)
-    .set(`Authorization`, `token ${API_KEY}`)
-    .then(rests => res.send(rests))
+    .query({$$app_token: `${API_KEY}`})
+    .then(rests => res.send(rests.text))
     .catch(console.error);
 });
 
