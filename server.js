@@ -31,7 +31,17 @@ app.get('/api/v1/rests', (req, res) => {
     .catch(console.error);
 });
 
+app.get('/api/v1/rests/:id', (req, res) => {
+  const url = 'https://data.kingcounty.gov/resource/gkhn-e8mn.json';
+  console.log(req.params);
+  superagent(url)
+    .query({business_id: `${req.params.id}`})
+    .query({$$app_token: `${API_KEY}`})
+    .then(rests => res.send(rests.text))
+    .catch(console.error);
+});
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
+
 
 app.post('/api/v1/users', bodyParser, (req, res) => {
   let{username, firstname, lastname, email, password} = req.body;
