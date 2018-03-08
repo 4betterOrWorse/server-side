@@ -47,7 +47,7 @@ app.post('/api/v1/reviews/create', bodyParser, (req, res) => {
   let{username, review} = req.body;
   client.query(`INSERT INTO reviews(username, review) VALUES($1, $2)
   ON CONFLICT DO NOTHING;`,
-    [username, review]
+  [username, review]
   )
     .then(() => res.sendStatus(201))
     .catch(console.error);
@@ -57,10 +57,10 @@ app.put('/api/v1/reviews/update/:review_id', bodyParser, (req, res) => {
   client.query(`
     UPDATE reviews
     SET review=$1 WHERE username=$2;`,
-    [
-      req.body.review,
-      req.body.username,
-    ]
+  [
+    req.body.review,
+    req.body.username,
+  ]
   )
     .then(() => res.sendStatus(201))
     .catch(console.error);
@@ -78,36 +78,35 @@ app.get('/api/v1/reviews/:review_id', (req, res) => {
     .catch(console.error);
 });
 
-app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
 app.get('/api/v1/yelp/:term', (req, res) => {
   const url = 'https://api.yelp.com/v3/businesses/search';
   superagent(url)
-    .query({term: `${req.params.term}`})
-    .query({limit: 5})
-    .query({categories: 'restaurants'})
-    .query({location: 'Seattle'})
-    .set({Authorization: `Bearer ${API_KEY2}`})
-    .then(yelp => res.send(yelp.text))
-    .catch(console.error);
+  .query({term: `${req.params.term}`})
+  .query({limit: 5})
+  .query({categories: 'restaurants'})
+  .query({location: 'Seattle'})
+  .set({Authorization: `Bearer ${API_KEY2}`})
+  .then(yelp => res.send(yelp.text))
+  .catch(console.error);
 });
 
 app.get('/api/v1/yelp/businesses/:id', (req, res) => {
   const url = `https://api.yelp.com/v3/businesses/${req.params.id}`;
   superagent(url)
-    .set({Authorization: `Bearer ${API_KEY2}`})
-    .then(yelp => res.send(yelp.text))
-    .catch(console.error);
+  .set({Authorization: `Bearer ${API_KEY2}`})
+  .then(yelp => res.send(yelp.text))
+  .catch(console.error);
 });
 
 app.get('/api/v1/yelp/health/:id', (req, res) => {
   console.log(req.params.address);
   const url = 'https://data.kingcounty.gov/resource/gkhn-e8mn.json';
   superagent(url)
-    .query({$where: `starts_with(address, '${req.params.address}'`})
-    .query({$$app_token: `${API_KEY}`})
-    .then(rests => res.send(rests.text))
-    .catch(console.error);
+  .query({$where: `starts_with(address, '${req.params.address}'`})
+  .query({$$app_token: `${API_KEY}`})
+  .then(rests => res.send(rests.text))
+  .catch(console.error);
 });
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
@@ -116,7 +115,7 @@ app.post('/api/v1/users', bodyParser, (req, res) => {
   let{username, firstname, lastname, email, password} = req.body;
   client.query(`
   INSERT INTO users(username, firstname, lastname, email, password) VALUES($1, $2, $3, $4, $5)`,
-    [username, firstname, lastname, email, password]
+  [username, firstname, lastname, email, password]
   )
     .then(() => res.sendStatus(201))
     .catch(console.error);
