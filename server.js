@@ -33,7 +33,7 @@ app.get('/api/v1/rests', (req, res) => {
 
 app.get('/api/v1/rests/:id', (req, res) => {
   const url = 'https://data.kingcounty.gov/resource/gkhn-e8mn.json';
-  console.log(req.params);
+
   superagent(url)
     .query({business_id: `${req.params.id}`})
     .query({$$app_token: `${API_KEY}`})
@@ -43,8 +43,6 @@ app.get('/api/v1/rests/:id', (req, res) => {
 
 //postgres get request for new review
 app.post('/api/v1/reviews/create', bodyParser, (req, res) => {
-  console.log('datebase entry create');
-  console.log(req);
   let{username, review} = req.body;
   client.query(`INSERT INTO reviews(username, review) VALUES($1, $2)
   ON CONFLICT DO NOTHING;`,
@@ -91,6 +89,13 @@ app.post('/api/v1/users', bodyParser, (req, res) => {
     [username, firstname, lastname, email, password]
   )
     .then(() => res.sendStatus(201))
+    .catch(console.error);
+});
+
+app.delete('/api/v1/reviews/delete', bodyParser, (req, res) => {
+  client.query(`DELETE FROM reviews WHERE username=$1;`,
+    [req.body.username])
+    .then(res.send('book deleted'))
     .catch(console.error);
 });
 
