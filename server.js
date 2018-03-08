@@ -98,11 +98,10 @@ app.get('/api/v1/yelp/businesses/:id', (req, res) => {
     .catch(console.error);
 });
 
-app.get('/api/v1/yelp/health/:id', (req, res) => {
-  console.log(req.params.address);
+app.get('/api/v1/yelp/KC/:id', (req, res) => {
   const url = 'https://data.kingcounty.gov/resource/gkhn-e8mn.json';
   superagent(url)
-    .query({$where: `starts_with(address, '${req.params.address}'`})
+    .query({$where: `starts_with(address, '${req.params.id.toUpperCase()}')`})
     .query({$$app_token: `${API_KEY}`})
     .then(rests => res.send(rests.text))
     .catch(console.error);
