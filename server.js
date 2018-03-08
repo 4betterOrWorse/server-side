@@ -40,6 +40,33 @@ app.get('/api/v1/rests/:id', (req, res) => {
     .then(rests => res.send(rests.text))
     .catch(console.error);
 });
+
+//postgres get request for new review
+app.post('/api/v1/reviews/create', bodyParser, (req, res) => {
+  let{username, review} = req.body;
+  client.query(`INSERT INTO reviews(username, review) VALUES($1, $2)
+  ON CONFLICT DO NOTHING;`,
+    [username, review]
+  )
+    .then(() => res.sendStatus(201))
+    .catch(console.error);
+});
+
+app.get('/api/v1/reviews', (req, res) => {
+  console.log('hit route');
+  client.query(`SELECT * FROM reviews;`)
+    .then(results => res.send(results.rows))
+    .catch(console.error);
+});
+
+app.get('/api/v1/reviews/:review_id', (req, res) => {
+  client.query(`SELECT * FROM reviews WHERE review_id=${req.params.review_id}`)
+    .then(results => res.send(results.rows))
+    .catch(console.error);
+});
+
+
+
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
 
