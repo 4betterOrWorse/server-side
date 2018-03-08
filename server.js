@@ -43,6 +43,8 @@ app.get('/api/v1/rests/:id', (req, res) => {
 
 //postgres get request for new review
 app.post('/api/v1/reviews/create', bodyParser, (req, res) => {
+  console.log('datebase entry create');
+  console.log(req);
   let{username, review} = req.body;
   client.query(`INSERT INTO reviews(username, review) VALUES($1, $2)
   ON CONFLICT DO NOTHING;`,
@@ -52,8 +54,21 @@ app.post('/api/v1/reviews/create', bodyParser, (req, res) => {
     .catch(console.error);
 });
 
+app.put('/api/v1/reviews/update/:review_id', bodyParser, (req, res) => {
+  client.query(`
+    UPDATE reviews
+    SET review=$1 WHERE username=$2;`,
+    [
+      req.body.review,
+      req.body.username,
+    ]
+  )
+    .then(() => res.sendStatus(201))
+    .catch(console.error);
+});
+
+
 app.get('/api/v1/reviews', (req, res) => {
-  console.log('hit route');
   client.query(`SELECT * FROM reviews;`)
     .then(results => res.send(results.rows))
     .catch(console.error);
