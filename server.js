@@ -9,7 +9,6 @@ const superagent = require('superagent');
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
-// const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 
 const API_KEY = process.env.KC_API_KEY;
 const API_KEY2 = process.env.YELP_API_KEY;
@@ -82,31 +81,31 @@ app.get('/api/v1/reviews/:review_id', (req, res) => {
 app.get('/api/v1/yelp/:term', (req, res) => {
   const url = 'https://api.yelp.com/v3/businesses/search';
   superagent(url)
-  .query({term: `${req.params.term}`})
-  .query({limit: 5})
-  .query({categories: 'restaurants'})
-  .query({location: 'Seattle'})
-  .set({Authorization: `Bearer ${API_KEY2}`})
-  .then(yelp => res.send(yelp.text))
-  .catch(console.error);
+    .query({term: `${req.params.term}`})
+    .query({limit: 5})
+    .query({categories: 'restaurants'})
+    .query({location: 'Seattle'})
+    .set({Authorization: `Bearer ${API_KEY2}`})
+    .then(yelp => res.send(yelp.text))
+    .catch(console.error);
 });
 
 app.get('/api/v1/yelp/businesses/:id', (req, res) => {
   const url = `https://api.yelp.com/v3/businesses/${req.params.id}`;
   superagent(url)
-  .set({Authorization: `Bearer ${API_KEY2}`})
-  .then(yelp => res.send(yelp.text))
-  .catch(console.error);
+    .set({Authorization: `Bearer ${API_KEY2}`})
+    .then(yelp => res.send(yelp.text))
+    .catch(console.error);
 });
 
 app.get('/api/v1/yelp/health/:id', (req, res) => {
   console.log(req.params.address);
   const url = 'https://data.kingcounty.gov/resource/gkhn-e8mn.json';
   superagent(url)
-  .query({$where: `starts_with(address, '${req.params.address}'`})
-  .query({$$app_token: `${API_KEY}`})
-  .then(rests => res.send(rests.text))
-  .catch(console.error);
+    .query({$where: `starts_with(address, '${req.params.address}'`})
+    .query({$$app_token: `${API_KEY}`})
+    .then(rests => res.send(rests.text))
+    .catch(console.error);
 });
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
@@ -133,6 +132,8 @@ app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 /* export PORT=3000
 export CLIENT_URL=http://localhost:8080
 export DATABASE_URL=postgres://localhost:5432/dontgo
+or
+export DATABASE_URL=postgres://localhost:5432/dont-go
 */
 
 // Windows:
