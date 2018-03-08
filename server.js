@@ -61,6 +61,16 @@ app.get('/api/v1/yelp/businesses/:id', (req, res) => {
     .catch(console.error);
 });
 
+app.get('/api/v1/yelp/health/:id', (req, res) => {
+  console.log(req.params.address);
+  const url = 'https://data.kingcounty.gov/resource/gkhn-e8mn.json';
+  superagent(url)
+    .query({$where: `starts_with(address, '${req.params.address}'`})
+    .query({$$app_token: `${API_KEY}`})
+    .then(rests => res.send(rests.text))
+    .catch(console.error);
+});
+
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
 app.post('/api/v1/users', bodyParser, (req, res) => {
