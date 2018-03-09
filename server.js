@@ -46,7 +46,7 @@ app.post('/api/v1/reviews/create', bodyParser, (req, res) => {
   let{username, review} = req.body;
   client.query(`INSERT INTO reviews(username, review) VALUES($1, $2)
   ON CONFLICT DO NOTHING;`,
-    [username, review]
+  [username, review]
   )
     .then(() => res.sendStatus(201))
     .catch(console.error);
@@ -56,10 +56,10 @@ app.put('/api/v1/reviews/update/:review_id', bodyParser, (req, res) => {
   client.query(`
     UPDATE reviews
     SET review=$1 WHERE username=$2;`,
-    [
-      req.body.review,
-      req.body.username,
-    ]
+  [
+    req.body.review,
+    req.body.username,
+  ]
   )
     .then(() => res.sendStatus(201))
     .catch(console.error);
@@ -121,7 +121,7 @@ app.post('/api/v1/reviews/create', bodyParser, (req, res) => {
 
 app.put('/api/v1/reviews/update/:review_id', bodyParser, (req, res) => {
   client.query(`
-  INSERT INTO users(username, firstname, lastname, email, password) VALUES($1, $2, $3, $4, $5)`,
+  INSERT INTO users(username, firstname, lastname, email, password) VALUES($1, $2, $3, $4, $5),
     [username, firstname, lastname, email, password]
     UPDATE reviews
     SET review=$1 WHERE username=$2;`,
