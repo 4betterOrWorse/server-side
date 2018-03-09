@@ -77,7 +77,6 @@ app.get('/api/v1/reviews/:review_id', (req, res) => {
     .catch(console.error);
 });
 
-
 app.get('/api/v1/yelp/:term', (req, res) => {
   const url = 'https://api.yelp.com/v3/businesses/search';
   superagent(url)
@@ -109,11 +108,27 @@ app.get('/api/v1/yelp/KC/:id', (req, res) => {
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
-app.post('/api/v1/users', bodyParser, (req, res) => {
-  let{username, firstname, lastname, email, password} = req.body;
+//postgres get request for new review
+app.post('/api/v1/reviews/create', bodyParser, (req, res) => {
+  let{username, review} = req.body;
+  client.query(`INSERT INTO reviews(username, review) VALUES($1, $2)
+  ON CONFLICT DO NOTHING;`,
+  [username, review]
+  )
+    .then(() => res.sendStatus(201))
+    .catch(console.error);
+});
+
+app.put('/api/v1/reviews/update/:review_id', bodyParser, (req, res) => {
   client.query(`
   INSERT INTO users(username, firstname, lastname, email, password) VALUES($1, $2, $3, $4, $5)`,
     [username, firstname, lastname, email, password]
+    UPDATE reviews
+    SET review=$1 WHERE username=$2;`,
+  [
+    req.body.review,
+    req.body.username,
+  ]
   )
     .then(() => res.sendStatus(201))
     .catch(console.error);
