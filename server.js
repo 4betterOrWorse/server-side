@@ -41,12 +41,11 @@ app.get('/api/v1/rests/:id', (req, res) => {
     .catch(console.error);
 });
 
-//postgres get request for new review
 app.post('/api/v1/reviews/create', bodyParser, (req, res) => {
   let{username, review} = req.body;
   client.query(`INSERT INTO reviews(username, review) VALUES($1, $2)
   ON CONFLICT DO NOTHING;`,
-  [username, review]
+    [username, review]
   )
     .then(() => res.sendStatus(201))
     .catch(console.error);
@@ -56,10 +55,10 @@ app.put('/api/v1/reviews/update/:review_id', bodyParser, (req, res) => {
   client.query(`
     UPDATE reviews
     SET review=$1 WHERE username=$2;`,
-  [
-    req.body.review,
-    req.body.username,
-  ]
+    [
+      req.body.review,
+      req.body.username,
+    ]
   )
     .then(() => res.sendStatus(201))
     .catch(console.error);
@@ -108,12 +107,11 @@ app.get('/api/v1/yelp/KC/:id', (req, res) => {
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
-//postgres get request for new review
 app.post('/api/v1/reviews/create', bodyParser, (req, res) => {
   let{username, review} = req.body;
   client.query(`INSERT INTO reviews(username, review) VALUES($1, $2)
   ON CONFLICT DO NOTHING;`,
-  [username, review]
+    [username, review]
   )
     .then(() => res.sendStatus(201))
     .catch(console.error);
@@ -125,10 +123,10 @@ app.put('/api/v1/reviews/update/:review_id', bodyParser, (req, res) => {
     [username, firstname, lastname, email, password]
     UPDATE reviews
     SET review=$1 WHERE username=$2;`,
-  [
-    req.body.review,
-    req.body.username,
-  ]
+    [
+      req.body.review,
+      req.body.username,
+    ]
   )
     .then(() => res.sendStatus(201))
     .catch(console.error);
@@ -146,7 +144,6 @@ app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 /* export PORT=3000
 export CLIENT_URL=http://localhost:8080
 export DATABASE_URL=postgres://localhost:5432/dontgo
+Windows:
+DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/dontgo
 */
-
-// Windows:
-// DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/dontgo
